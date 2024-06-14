@@ -1,0 +1,133 @@
+<html lang="en" class="">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Animate Demo</title>
+
+    <meta name="robots" content="noindex" />
+
+    <style>
+      .square {
+        height: 100px;
+        width: 100px;
+        position: absolute;
+        transition: transform 0.11s ease-in-out;
+      }
+      .container {
+        max-width: 700px;
+      }
+
+      .halftone {
+        --dotSize: 0.05rem;
+        --bgSize: 0.5rem;
+        --bgPosition: calc(var(--bgSize) / 2);
+        --dotColor: rgba(0, 0, 0, 0.1);
+
+        background-image: radial-gradient(
+            circle at center,
+            var(--dotColor) var(--dotSize),
+            transparent 0
+          ),
+          radial-gradient(
+            circle at center,
+            var(--dotColor) var(--dotSize),
+            transparent 0
+          );
+        background-size: var(--bgSize) var(--bgSize);
+        background-position: 0 0, var(--bgPosition) var(--bgPosition);
+      }
+    </style>
+  </head>
+
+  <body class="halftone">
+    <div class="container">
+      <div class="data">
+        <p><code>pageX</code>: <span id="x">n/a</span></p>
+        <p><code>pageY</code>: <span id="y">n/a</span></p>
+      </div>
+      <div class="square-container" data-x="200" data-y="60">
+        <img class="square" src="/images/1.png" />
+      </div>
+      <div class="square-container" data-x="300" data-y="123">
+        <img class="square" src="/images/2.png" />
+      </div>
+      <div class="square-container" data-x="400" data-y="183">
+        <img class="square" src="/images/3.png" />
+      </div>
+      <div class="square-container" data-x="500" data-y="293">
+        <img class="square" src="/images/4.png" />
+      </div>
+      <div class="square-container" data-x="943" data-y="222">
+        <img class="square" src="/images/5.png" />
+      </div>
+      <div class="square-container" data-x="10" data-y="300">
+        <img class="square" src="/images/6.png" />
+      </div>
+      <div class="square-container" data-x="623" data-y="349">
+        <img class="square" src="/images/7.png" />
+      </div>
+      <div class="square-container" data-x="300" data-y="500">
+        <img class="square" src="/images/8.png" />
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
+
+    <script>
+      const box = document.querySelector("html");
+      const textX = document.getElementById("x");
+      const textY = document.getElementById("y");
+
+      let lastExecutionTime = 0;
+      let percentageX = 0;
+      let percentageY = 0;
+
+      function updateDisplay(event) {
+        const currentTime = Date.now();
+        if (currentTime - lastExecutionTime < 50) {
+          return;
+        }
+        lastExecutionTime = currentTime;
+
+        textX.innerText = event.pageX;
+        textY.innerText = event.pageY;
+
+        percentageY = event.pageY / box.clientWidth;
+        percentageX = event.pageX / box.clientHeight;
+      }
+
+      function animate() {
+        anime({
+          targets: ".square",
+          duration: 2222,
+          easing: "easeOutInQuad",
+          translateX: function () {
+            return percentageX * anime.random(65, 100);
+          },
+          translateY: function () {
+            return percentageY * anime.random(40, 85);
+          },
+          translateZ: 0,
+          complete: function (anim) {
+            animate();
+          },
+        });
+      }
+
+      animate();
+
+      box.addEventListener("mousemove", updateDisplay, false);
+      box.addEventListener("mouseenter", updateDisplay, false);
+      box.addEventListener("mouseleave", updateDisplay, false);
+
+      anime({
+        targets: ".square-container",
+        translateX: function (el) {
+          return el.getAttribute("data-x");
+        },
+        translateY: function (el) {
+          return el.getAttribute("data-y");
+        },
+        easing: "easeInOutQuad",
+      });
+    </script>
+  </body>
+</html>
