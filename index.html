@@ -11,9 +11,14 @@
         width: 100px;
         position: absolute;
         transition: transform 0.11s ease-in-out;
+        opacity: 0.5;
       }
       .container {
-        max-width: 700px;
+        max-width: 1080px;
+        height: 700px;
+        margin-right: auto;
+        margin-left: auto;
+        border: 2px red solid;
       }
 
       .halftone {
@@ -72,7 +77,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
 
     <script>
-      const box = document.querySelector("html");
+      const box = document.querySelector(".container");
       const textX = document.getElementById("x");
       const textY = document.getElementById("y");
 
@@ -82,7 +87,7 @@
 
       function updateDisplay(event) {
         const currentTime = Date.now();
-        if (currentTime - lastExecutionTime < 50) {
+        if (currentTime - lastExecutionTime < 10) {
           return;
         }
         lastExecutionTime = currentTime;
@@ -97,13 +102,13 @@
       function animate() {
         anime({
           targets: ".square",
-          duration: 2222,
+          duration: 888,
           easing: "easeOutInQuad",
           translateX: function () {
-            return percentageX * anime.random(65, 100);
+            return percentageX * anime.random(0, 100);
           },
           translateY: function () {
-            return percentageY * anime.random(40, 85);
+            return percentageY * anime.random(0, 100);
           },
           translateZ: 0,
           complete: function (anim) {
@@ -121,10 +126,10 @@
       anime({
         targets: ".square-container",
         translateX: function (el) {
-          return el.getAttribute("data-x");
+          return anime.random(0, box.clientWidth) - 100;
         },
         translateY: function (el) {
-          return el.getAttribute("data-y");
+          return anime.random(0, box.clientHeight) - 100;
         },
         easing: "easeInOutQuad",
       });
