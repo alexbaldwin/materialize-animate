@@ -82,8 +82,8 @@
       const textY = document.getElementById("y");
 
       let lastExecutionTime = 0;
-      let percentageX = 0;
-      let percentageY = 0;
+      let percentageX = 3;
+      let percentageY = 2;
 
       function updateDisplay(event) {
         const currentTime = Date.now();
@@ -102,13 +102,13 @@
       function animate() {
         anime({
           targets: ".square",
-          duration: 888,
+          duration: 3000,
           easing: "easeOutInQuad",
           translateX: function () {
-            return percentageX * anime.random(0, 100);
+            return percentageX * anime.random(0, 10);
           },
           translateY: function () {
-            return percentageY * anime.random(0, 100);
+            return percentageY * anime.random(0, 10);
           },
           translateZ: 0,
           complete: function (anim) {
@@ -126,10 +126,10 @@
       anime({
         targets: ".square-container",
         translateX: function (el) {
-          return anime.random(0, box.clientWidth) - 100;
+          return anime.random(0, box.clientWidth) - 50;
         },
         translateY: function (el) {
-          return anime.random(0, box.clientHeight) - 100;
+          return anime.random(0, box.clientHeight) - 50;
         },
         easing: "easeInOutQuad",
       });
