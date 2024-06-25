@@ -6,6 +6,9 @@
     <meta name="robots" content="noindex" />
 
     <style>
+      body {
+        background: #fff847;
+      }
       .square {
         height: 100px;
         width: 100px;
@@ -13,19 +16,16 @@
         transition: transform 0.11s ease-in-out;
         opacity: 0.5;
       }
-      .square-container {
-        position: absolute;
-      }
       .container {
         max-width: 1080px;
+        height: 700px;
         margin-right: auto;
         margin-left: auto;
         border: 2px red solid;
-        position: relative;
       }
 
       .halftone {
-        --dotSize: 0.05rem;
+        --dotSize: 0.1rem;
         --bgSize: 0.5rem;
         --bgPosition: calc(var(--bgSize) / 2);
         --dotColor: rgba(0, 0, 0, 0.1);
@@ -43,71 +43,37 @@
         background-size: var(--bgSize) var(--bgSize);
         background-position: 0 0, var(--bgPosition) var(--bgPosition);
       }
-
-      header {
-        text-align: center;
-        max-width: 800px;
-        margin-right: auto;
-        margin-left: auto;
-        padding: 12rem 0;
-      }
-      header h1 {
-        font-size: 4rem;
-        margin-top: 0;
-      }
     </style>
   </head>
 
   <body class="halftone">
     <div class="container">
-      <header>
-        <h1>Let your fans fuel your <br />next masterpiece.</h1>
-        <h2>
-          Materialize is a place for fans to fund their favorite ideas from
-          creators.
-        </h2>
-        <button>Discover Projects</button>
-      </header>
-      <div
-        class="square-container"
-        style="left: calc(-50px + 40%); top: calc(-50px + 4%)"
-      >
+      <div class="data">
+        <p><code>pageX</code>: <span id="x">n/a</span></p>
+        <p><code>pageY</code>: <span id="y">n/a</span></p>
+      </div>
+      <div class="square-container" data-x="200" data-y="60">
         <img class="square" src="images/1.png" />
       </div>
-      <div
-        class="square-container"
-        style="left: calc(-50px + 8%); top: calc(-50px + 20%)"
-      >
+      <div class="square-container" data-x="300" data-y="123">
         <img class="square" src="images/2.png" />
       </div>
-      <div
-        class="square-container"
-        style="left: calc(-50px + 85%); top: calc(-50px + 12%)"
-      >
+      <div class="square-container" data-x="400" data-y="183">
         <img class="square" src="images/3.png" />
       </div>
-      <div
-        class="square-container"
-        style="left: calc(-50px + 40%); top: calc(-50px + 95%)"
-      >
+      <div class="square-container" data-x="500" data-y="293">
         <img class="square" src="images/4.png" />
       </div>
-      <div
-        class="square-container"
-        style="left: calc(-50px + 9%); top: calc(-50px + 77%)"
-      >
+      <div class="square-container" data-x="943" data-y="222">
+        <img class="square" src="images/5.png" />
+      </div>
+      <div class="square-container" data-x="10" data-y="300">
         <img class="square" src="images/6.png" />
       </div>
-      <div
-        class="square-container"
-        style="left: calc(-50px + 92%); top: calc(-50px + 56%)"
-      >
+      <div class="square-container" data-x="623" data-y="349">
         <img class="square" src="images/7.png" />
       </div>
-      <div
-        class="square-container"
-        style="left: calc(-50px + 96%); top: calc(-50px + 82%)"
-      >
+      <div class="square-container" data-x="300" data-y="500">
         <img class="square" src="images/8.png" />
       </div>
     </div>
@@ -155,6 +121,22 @@
       }
 
       animate();
+
+      box.addEventListener("mousemove", updateDisplay, false);
+      box.addEventListener("mouseenter", updateDisplay, false);
+      box.addEventListener("mouseleave", updateDisplay, false);
+
+      anime({
+        targets: ".square-container",
+        translateX: function (el) {
+          // Can hardcode with data-x ATTR or use random based on box size
+          return anime.random(0, box.clientWidth) - 50;
+        },
+        translateY: function (el) {
+          return anime.random(0, box.clientHeight) - 50;
+        },
+        easing: "easeInOutQuad",
+      });
     </script>
   </body>
 </html>

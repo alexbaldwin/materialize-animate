@@ -1,0 +1,164 @@
+<html lang="en" class="">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Animate Demo</title>
+
+    <meta name="robots" content="noindex" />
+
+    <style>
+      body {
+        background: rgba(0, 255, 0, 0.1);
+      }
+      .square {
+        height: 100px;
+        width: 100px;
+        position: absolute;
+        transition: transform 0.11s ease-in-out;
+        opacity: 0.5;
+        z-index: 3;
+      }
+      .container {
+        max-width: 1080px;
+        height: 700px;
+        margin-right: auto;
+        margin-left: auto;
+        border: 2px red solid;
+      }
+
+      .card {
+        --mask: linear-gradient(rgb(0 0 0), rgb(0 0 0 / 0.5));
+        --dotsColor: 255 255 255;
+        --bg: radial-gradient(
+          circle at center,
+          rgb(var(--dotsColor)) 3%,
+          rgb(var(--dotsColor) / 0.4) var(--dotRadius, 70%)
+        );
+        --bgSize: var(--size);
+        --cardBg: #fff847;
+        background: var(--cardBg);
+        overflow: hidden;
+        border: 2px solid;
+        border-image: var(--cardBg) 30;
+      }
+
+      .halftone {
+        position: relative;
+        aspect-ratio: 1;
+        background: rgb(0 0 0);
+        filter: contrast(var(--contrast, 20)) invert(var(--invert, 0));
+        mix-blend-mode: var(--blendMode, multiply);
+      }
+
+      .halftone::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: var(--bg);
+        background-size: var(--bgSize, 0.75rem) var(--bgSize, 0.75rem);
+        background-repeat: round;
+        background-position: 0 0, var(--bgPosition) var(--bgPosition);
+        -webkit-mask-image: var(--mask);
+        mask-image: var(--mask);
+        mask-size: cover;
+        mask-position: center;
+        transition: background-size 100ms;
+      }
+    </style>
+  </head>
+
+  <body class="card">
+    <div class="halftone">
+      <div class="container">
+        <div class="data">
+          <p><code>pageX</code>: <span id="x">n/a</span></p>
+          <p><code>pageY</code>: <span id="y">n/a</span></p>
+        </div>
+        <div class="square-container" data-x="200" data-y="60">
+          <img class="square" src="images/1.png" />
+        </div>
+        <div class="square-container" data-x="300" data-y="123">
+          <img class="square" src="images/2.png" />
+        </div>
+        <div class="square-container" data-x="400" data-y="183">
+          <img class="square" src="images/3.png" />
+        </div>
+        <div class="square-container" data-x="500" data-y="293">
+          <img class="square" src="images/4.png" />
+        </div>
+        <div class="square-container" data-x="943" data-y="222">
+          <img class="square" src="images/5.png" />
+        </div>
+        <div class="square-container" data-x="10" data-y="300">
+          <img class="square" src="images/6.png" />
+        </div>
+        <div class="square-container" data-x="623" data-y="349">
+          <img class="square" src="images/7.png" />
+        </div>
+        <div class="square-container" data-x="300" data-y="500">
+          <img class="square" src="images/8.png" />
+        </div>
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
+
+    <script>
+      const box = document.querySelector(".container");
+      const textX = document.getElementById("x");
+      const textY = document.getElementById("y");
+
+      let lastExecutionTime = 0;
+      let percentageX = 3;
+      let percentageY = 2;
+
+      function updateDisplay(event) {
+        const currentTime = Date.now();
+        if (currentTime - lastExecutionTime < 10) {
+          return;
+        }
+        lastExecutionTime = currentTime;
+
+        textX.innerText = event.pageX;
+        textY.innerText = event.pageY;
+
+        percentageY = event.pageY / box.clientWidth;
+        percentageX = event.pageX / box.clientHeight;
+      }
+
+      function animate() {
+        anime({
+          targets: ".square",
+          duration: 3000,
+          easing: "easeOutInQuad",
+          translateX: function () {
+            return percentageX * anime.random(0, 10);
+          },
+          translateY: function () {
+            return percentageY * anime.random(0, 10);
+          },
+          translateZ: 0,
+          complete: function (anim) {
+            animate();
+          },
+        });
+      }
+
+      animate();
+
+      box.addEventListener("mousemove", updateDisplay, false);
+      box.addEventListener("mouseenter", updateDisplay, false);
+      box.addEventListener("mouseleave", updateDisplay, false);
+
+      anime({
+        targets: ".square-container",
+        translateX: function (el) {
+          // Can hardcode with data-x ATTR or use random based on box size
+          return anime.random(0, box.clientWidth) - 50;
+        },
+        translateY: function (el) {
+          return anime.random(0, box.clientHeight) - 50;
+        },
+        easing: "easeInOutQuad",
+      });
+    </script>
+  </body>
+</html>
